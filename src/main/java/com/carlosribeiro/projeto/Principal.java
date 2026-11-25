@@ -1,0 +1,79 @@
+package com.carlosribeiro.projeto;
+
+import com.carlosribeiro.projeto.dao.*;
+import com.carlosribeiro.projeto.model.*;
+import com.carlosribeiro.projeto.util.FabricaDeObjetos;
+import corejava.Console;
+
+import java.io.*;
+import java.util.Map;
+
+public class Principal {
+
+    private static PrincipalCliente principalCliente = FabricaDeObjetos.getInstance(PrincipalCliente.class);
+
+    public static void main(String[] args) {
+
+        recuperarDados();
+
+        boolean continua = true;
+        while (continua) {
+            System.out.println('\n' + "========================================================");
+            System.out.println('\n' + "O que você deseja fazer?");
+            System.out.println('\n' + "1. Tratar Clientes");
+            System.out.println("2. Sair");
+
+            int opcao = Console.readInt('\n' + "Digite um número entre 1 e 2:");
+
+            System.out.println();
+
+            switch (opcao) {
+                case 1 -> {
+                    principalCliente.principal();
+                }
+                case 2 -> {
+                    salvarDados();
+                    continua = false;
+                }
+
+                default -> System.out.println('\n' + "Opção inválida!");
+            }
+        }
+    }
+
+    private static void recuperarDados() {
+        ClienteDao clienteDao = FabricaDeObjetos.getInstance(ClienteDao.class);
+
+        try {
+
+            FileInputStream fis = new FileInputStream("dados.dat");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            Map<Integer, Cliente> mapDeClientes = (Map<Integer, Cliente>) ois.readObject();
+            int contadorCliente = ois.readInt();
+            clienteDao.setMap(mapDeClientes);
+            clienteDao.setContador(contadorCliente);
+            ois.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo dados.dat não encontrado. Será criado.");
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void salvarDados() {
+        ClienteDao clienteDao = FabricaDeObjetos.getInstance(ClienteDao.class);
+        Map<Integer, Cliente> mapDeClientes = clienteDao.getMap();
+        int contadorCliente = clienteDao.getContador();
+
+        try {
+            FileOutputStream fos = new FileOutputStream("dados.dat");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(mapDeClientes);
+            oos.writeInt(contadorCliente);
+            oos.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
