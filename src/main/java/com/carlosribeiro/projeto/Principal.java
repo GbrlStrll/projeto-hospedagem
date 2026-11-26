@@ -12,6 +12,8 @@ public class Principal {
 
     private static PrincipalCliente principalCliente = FabricaDeObjetos.getInstance(PrincipalCliente.class);
 
+    private static PrincipalProduto principalProduto = FabricaDeObjetos.getInstance(PrincipalProduto.class);
+
     public static void main(String[] args) {
 
         recuperarDados();
@@ -21,9 +23,10 @@ public class Principal {
             System.out.println('\n' + "========================================================");
             System.out.println('\n' + "O que você deseja fazer?");
             System.out.println('\n' + "1. Tratar Clientes");
-            System.out.println("2. Sair");
+            System.out.println("2. Tratar Produtos");
+            System.out.println("3. Sair");
 
-            int opcao = Console.readInt('\n' + "Digite um número entre 1 e 2:");
+            int opcao = Console.readInt('\n' + "Digite um número entre 1 e 3:");
 
             System.out.println();
 
@@ -32,6 +35,9 @@ public class Principal {
                     principalCliente.principal();
                 }
                 case 2 -> {
+                    principalProduto.principal();
+                }
+                case 3 -> {
                     salvarDados();
                     continua = false;
                 }
@@ -43,6 +49,7 @@ public class Principal {
 
     private static void recuperarDados() {
         ClienteDao clienteDao = FabricaDeObjetos.getInstance(ClienteDao.class);
+        ProdutoDao produtoDao = FabricaDeObjetos.getInstance(ProdutoDao.class);
 
         try {
 
@@ -53,6 +60,11 @@ public class Principal {
             int contadorCliente = ois.readInt();
             clienteDao.setMap(mapDeClientes);
             clienteDao.setContador(contadorCliente);
+
+            Map<Integer, Produto> mapDeProdutos = (Map<Integer, Produto>) ois.readObject();
+            int contadorProduto = ois.readInt();
+            produtoDao.setMap(mapDeProdutos);
+            produtoDao.setContador(contadorProduto);
             ois.close();
         } catch (FileNotFoundException e) {
             System.out.println("Arquivo dados.dat não encontrado. Será criado.");
@@ -66,11 +78,17 @@ public class Principal {
         Map<Integer, Cliente> mapDeClientes = clienteDao.getMap();
         int contadorCliente = clienteDao.getContador();
 
+        ProdutoDao produtoDao = FabricaDeObjetos.getInstance(ProdutoDao.class);
+        Map<Integer, Produto> mapDeProdutos = produtoDao.getMap();
+        int contadorProduto = produtoDao.getContador();
+
         try {
             FileOutputStream fos = new FileOutputStream("dados.dat");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(mapDeClientes);
             oos.writeInt(contadorCliente);
+            oos.writeObject(mapDeProdutos);
+            oos.writeInt(contadorProduto);
             oos.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
