@@ -4,16 +4,20 @@ import com.carlosribeiro.projeto.annotation.Id;
 import com.carlosribeiro.projeto.util.Util;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Acomodacao implements Serializable {
 	@Id
 	private int id;
 	private int numeroDoQuarto;
 	private double precoDaDiaria;
+	private List<Hospedagem> hospedagens;
 
 	public Acomodacao(int numeroDoQuarto, double precoDaDiaria) {
 		this.numeroDoQuarto = numeroDoQuarto;
 		this.precoDaDiaria = precoDaDiaria;
+		this.hospedagens = new ArrayList<>();
 	}
 
 	public String toString() {
@@ -31,6 +35,10 @@ public class Acomodacao implements Serializable {
 	public double getPrecoDaDiaria() {
 		return precoDaDiaria;
 	}
+	public List<Hospedagem> getHospedagens() {
+		return hospedagens;
+	}
+
 	private void setId(int id) {
 		this.id = id;
 	}
@@ -39,5 +47,8 @@ public class Acomodacao implements Serializable {
 	}
 	public void setPrecoDaDiaria(double precoDaDiaria) {
 		this.precoDaDiaria = precoDaDiaria;
+	}
+	public void setHospedagens(List<Hospedagem> hospedagens) {
+		this.hospedagens = hospedagens;
 	}
 }
