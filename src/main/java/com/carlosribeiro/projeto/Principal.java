@@ -12,6 +12,8 @@ public class Principal {
 
     private static PrincipalCliente principalCliente = FabricaDeObjetos.getInstance(PrincipalCliente.class);
 
+    private static PrincipalAcomodacao principalAcomodacao = FabricaDeObjetos.getInstance(PrincipalAcomodacao.class);
+
     private static PrincipalProduto principalProduto = FabricaDeObjetos.getInstance(PrincipalProduto.class);
 
     public static void main(String[] args) {
@@ -23,10 +25,11 @@ public class Principal {
             System.out.println('\n' + "========================================================");
             System.out.println('\n' + "O que você deseja fazer?");
             System.out.println('\n' + "1. Tratar Clientes");
-            System.out.println("2. Tratar Produtos");
-            System.out.println("3. Sair");
+            System.out.println("2. Tratar Acomodações");
+            System.out.println("3. Tratar Produtos");
+            System.out.println("4. Sair");
 
-            int opcao = Console.readInt('\n' + "Digite um número entre 1 e 3:");
+            int opcao = Console.readInt('\n' + "Digite um número entre 1 e 4:");
 
             System.out.println();
 
@@ -35,9 +38,12 @@ public class Principal {
                     principalCliente.principal();
                 }
                 case 2 -> {
-                    principalProduto.principal();
+                    principalAcomodacao.principal();
                 }
                 case 3 -> {
+                    principalProduto.principal();
+                }
+                case 4 -> {
                     salvarDados();
                     continua = false;
                 }
@@ -49,6 +55,7 @@ public class Principal {
 
     private static void recuperarDados() {
         ClienteDao clienteDao = FabricaDeObjetos.getInstance(ClienteDao.class);
+        AcomodacaoDao acomodacaoDao = FabricaDeObjetos.getInstance(AcomodacaoDao.class);
         ProdutoDao produtoDao = FabricaDeObjetos.getInstance(ProdutoDao.class);
 
         try {
@@ -60,6 +67,11 @@ public class Principal {
             int contadorCliente = ois.readInt();
             clienteDao.setMap(mapDeClientes);
             clienteDao.setContador(contadorCliente);
+
+            Map<Integer, Acomodacao> mapDeAcomodacoes = (Map<Integer, Acomodacao>) ois.readObject();
+            int contadorAcomodacao = ois.readInt();
+            acomodacaoDao.setMap(mapDeAcomodacoes);
+            acomodacaoDao.setContador(contadorAcomodacao);
 
             Map<Integer, Produto> mapDeProdutos = (Map<Integer, Produto>) ois.readObject();
             int contadorProduto = ois.readInt();
@@ -78,6 +90,10 @@ public class Principal {
         Map<Integer, Cliente> mapDeClientes = clienteDao.getMap();
         int contadorCliente = clienteDao.getContador();
 
+        AcomodacaoDao acomodacaoDao = FabricaDeObjetos.getInstance(AcomodacaoDao.class);
+        Map<Integer, Acomodacao> mapDeAcomodacoes = acomodacaoDao.getMap();
+        int contadorAcomodacao = acomodacaoDao.getContador();
+
         ProdutoDao produtoDao = FabricaDeObjetos.getInstance(ProdutoDao.class);
         Map<Integer, Produto> mapDeProdutos = produtoDao.getMap();
         int contadorProduto = produtoDao.getContador();
@@ -87,6 +103,8 @@ public class Principal {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(mapDeClientes);
             oos.writeInt(contadorCliente);
+            oos.writeObject(mapDeAcomodacoes);
+            oos.writeInt(contadorAcomodacao);
             oos.writeObject(mapDeProdutos);
             oos.writeInt(contadorProduto);
             oos.close();
