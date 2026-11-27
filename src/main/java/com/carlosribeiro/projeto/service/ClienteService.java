@@ -2,6 +2,7 @@ package com.carlosribeiro.projeto.service;
 
 import com.carlosribeiro.projeto.annotation.Autowired;
 import com.carlosribeiro.projeto.dao.ClienteDao;
+import com.carlosribeiro.projeto.exception.ClienteComHospedagensException;
 import com.carlosribeiro.projeto.exception.ClienteJaCadastradoException;
 import com.carlosribeiro.projeto.exception.EntidadeNaoEncontradaException;
 import com.carlosribeiro.projeto.model.Cliente;
@@ -22,7 +23,12 @@ public class ClienteService {
     }
 
     public Cliente remover(Integer id) {
-        return clienteDao.remover(id).orElseThrow(() -> new EntidadeNaoEncontradaException("Cliente com id = " + id + " não encontrado."));
+        Cliente cliente = recuperar(id);
+        if(cliente.getHospedagens().isEmpty()){
+            return clienteDao.remover(id).orElseThrow(() -> new EntidadeNaoEncontradaException("Cliente com id = " + id + " não encontrado."));
+        } else{
+            throw new ClienteComHospedagensException("Este cliente possui hospedagens, logo não pode ser removido.");
+        }
     }
 
     public Cliente recuperar(Integer id) {

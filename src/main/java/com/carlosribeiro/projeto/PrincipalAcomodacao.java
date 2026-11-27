@@ -1,6 +1,7 @@
 package com.carlosribeiro.projeto;
 
 import com.carlosribeiro.projeto.annotation.Autowired;
+import com.carlosribeiro.projeto.exception.AcomodacaoComHospedagensException;
 import com.carlosribeiro.projeto.exception.EntidadeNaoEncontradaException;
 import com.carlosribeiro.projeto.model.Acomodacao;
 import com.carlosribeiro.projeto.service.AcomodacaoService;
@@ -77,7 +78,7 @@ public class PrincipalAcomodacao
                     try {
                         acomodacaoService.remover(id);
                         System.out.println("Acomodação removida com sucesso");
-                    } catch (EntidadeNaoEncontradaException e){
+                    } catch (EntidadeNaoEncontradaException | AcomodacaoComHospedagensException e){
                         System.out.println(e.getMessage());
                     }
                 }

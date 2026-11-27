@@ -1,6 +1,7 @@
 package com.carlosribeiro.projeto;
 
 import com.carlosribeiro.projeto.annotation.Autowired;
+import com.carlosribeiro.projeto.exception.ClienteComHospedagensException;
 import com.carlosribeiro.projeto.exception.ClienteJaCadastradoException;
 import com.carlosribeiro.projeto.exception.EntidadeNaoEncontradaException;
 import com.carlosribeiro.projeto.model.Cliente;
@@ -84,7 +85,7 @@ public class PrincipalCliente
                     try {
                         clienteService.remover(id);
                         System.out.println("Cliente removido com sucesso");
-                    } catch (EntidadeNaoEncontradaException e){
+                    } catch (EntidadeNaoEncontradaException | ClienteComHospedagensException e){
                         System.out.println(e.getMessage());
                     }
                 }
