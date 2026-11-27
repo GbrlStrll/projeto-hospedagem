@@ -14,6 +14,8 @@ public class Principal {
 
     private static PrincipalAcomodacao principalAcomodacao = FabricaDeObjetos.getInstance(PrincipalAcomodacao.class);
 
+    private static PrincipalHospedagem principalHospedagem = FabricaDeObjetos.getInstance(PrincipalHospedagem.class);
+
     private static PrincipalProduto principalProduto = FabricaDeObjetos.getInstance(PrincipalProduto.class);
 
     public static void main(String[] args) {
@@ -26,10 +28,11 @@ public class Principal {
             System.out.println('\n' + "O que você deseja fazer?");
             System.out.println('\n' + "1. Tratar Clientes");
             System.out.println("2. Tratar Acomodações");
-            System.out.println("3. Tratar Produtos");
-            System.out.println("4. Sair");
+            System.out.println("3. Tratar Hospedagens");
+            System.out.println("4. Tratar Produtos");
+            System.out.println("5. Sair");
 
-            int opcao = Console.readInt('\n' + "Digite um número entre 1 e 4:");
+            int opcao = Console.readInt('\n' + "Digite um número entre 1 e 5:");
 
             System.out.println();
 
@@ -41,9 +44,12 @@ public class Principal {
                     principalAcomodacao.principal();
                 }
                 case 3 -> {
-                    principalProduto.principal();
+                    principalHospedagem.principal();
                 }
                 case 4 -> {
+                    principalProduto.principal();
+                }
+                case 5 -> {
                     salvarDados();
                     continua = false;
                 }
@@ -56,6 +62,7 @@ public class Principal {
     private static void recuperarDados() {
         ClienteDao clienteDao = FabricaDeObjetos.getInstance(ClienteDao.class);
         AcomodacaoDao acomodacaoDao = FabricaDeObjetos.getInstance(AcomodacaoDao.class);
+        HospedagemDao hospedagemDao = FabricaDeObjetos.getInstance(HospedagemDao.class);
         ProdutoDao produtoDao = FabricaDeObjetos.getInstance(ProdutoDao.class);
 
         try {
@@ -72,6 +79,11 @@ public class Principal {
             int contadorAcomodacao = ois.readInt();
             acomodacaoDao.setMap(mapDeAcomodacoes);
             acomodacaoDao.setContador(contadorAcomodacao);
+
+            Map<Integer, Hospedagem> mapDeHospedagens = (Map<Integer, Hospedagem>) ois.readObject();
+            int contadorHospedagem = ois.readInt();
+            hospedagemDao.setMap(mapDeHospedagens);
+            hospedagemDao.setContador(contadorHospedagem);
 
             Map<Integer, Produto> mapDeProdutos = (Map<Integer, Produto>) ois.readObject();
             int contadorProduto = ois.readInt();
@@ -94,6 +106,10 @@ public class Principal {
         Map<Integer, Acomodacao> mapDeAcomodacoes = acomodacaoDao.getMap();
         int contadorAcomodacao = acomodacaoDao.getContador();
 
+        HospedagemDao hospedagemDao = FabricaDeObjetos.getInstance(HospedagemDao.class);
+        Map<Integer, Hospedagem> mapDeHospedagens = hospedagemDao.getMap();
+        int contadorHospedagem = hospedagemDao.getContador();
+
         ProdutoDao produtoDao = FabricaDeObjetos.getInstance(ProdutoDao.class);
         Map<Integer, Produto> mapDeProdutos = produtoDao.getMap();
         int contadorProduto = produtoDao.getContador();
@@ -105,6 +121,8 @@ public class Principal {
             oos.writeInt(contadorCliente);
             oos.writeObject(mapDeAcomodacoes);
             oos.writeInt(contadorAcomodacao);
+            oos.writeObject(mapDeHospedagens);
+            oos.writeInt(contadorHospedagem);
             oos.writeObject(mapDeProdutos);
             oos.writeInt(contadorProduto);
             oos.close();
