@@ -27,6 +27,9 @@ public class Util {
         return formatadorMoeda.format(valor);
     }
     public static String formatarDataHora(LocalDateTime dataHora) {
+        if (dataHora == null) {
+            return "Não registrada";
+        }
         return formatadorDataHora.format(dataHora);
     }
     public static String formatarData(LocalDate data) {
