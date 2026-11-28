@@ -5,6 +5,8 @@ import com.carlosribeiro.projeto.util.Util;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Hospedagem implements Serializable {
     @Id
@@ -16,12 +18,14 @@ public class Hospedagem implements Serializable {
     private double precoDaDiaria;
     private Cliente cliente;
     private Acomodacao acomodacao;
+    private List<Consumo> consumos;
 
     public Hospedagem(LocalDateTime dataHoraEntradaPrevista, LocalDateTime dataHoraSaidaPrevista, Cliente cliente, Acomodacao acomodacao) {
         this.dataHoraEntradaPrevista = dataHoraEntradaPrevista;
         this.dataHoraSaidaPrevista = dataHoraSaidaPrevista;
         this.cliente = cliente;
         this.acomodacao = acomodacao;
+        this.consumos = new ArrayList<>();
     }
 
     public int getId() {
@@ -88,6 +92,13 @@ public class Hospedagem implements Serializable {
         this.acomodacao = acomodacao;
     }
 
+    public List<Consumo> getConsumos() {
+        return consumos;
+    }
+
+    public void setConsumos(List<Consumo> consumos) {
+        this.consumos = consumos;
+    }
 
     public String toString() {
         return "Id = " + id +
